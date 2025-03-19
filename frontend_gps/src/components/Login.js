@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
-import { loginUser } from "../api";
+import { login } from "../api"; // Import login function from api.js
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -9,13 +7,17 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const token = await userCredential.user.getIdToken();
-      await loginUser({ email, token });
+      // Send credentials to Django backend for authentication
+      const response = await login({ email, password });
+
       alert("Login successful!");
+      localStorage.setItem("token", response.token); // Store token for authentication
+      window.location.href = "/dashboard"; // Redirect after login
     } catch (error) {
-      alert("Login failed: " + error.message);
+      console.error("Login failed:", error);
+      alert("Login failed: " + (error.error || "Invalid credentials"));
     }
   };
 
@@ -23,8 +25,8 @@ const Login = () => {
     <div className="container mt-5">
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
-        <input type="email" placeholder="Email" className="form-control" onChange={(e) => setEmail(e.target.value)} required />
-        <input type="password" placeholder="Password" className="form-control mt-2" onChange={(e) => setPassword(e.target.value)} required />
+        <input type="email" placeholder="Email" className="form-control" value={email} onChange={(e) => setEmail(e.target.value)} required />
+        <input type="password" placeholder="Password" className="form-control mt-2" value={password} onChange={(e) => setPassword(e.target.value)} required />
         <button type="submit" className="btn btn-primary mt-3">Login</button>
       </form>
     </div>

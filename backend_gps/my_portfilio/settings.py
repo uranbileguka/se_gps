@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'crispy_bootstrap4',
     'pages.apps.PagesConfig',
 	'rest_framework',
-    'corsheaders',  # CORS for frontend
+    'corsheaders', 
+	'rest_framework_simplejwt', # CORS for frontend
 ]
 
 MIDDLEWARE = [
@@ -99,8 +100,11 @@ REST_FRAMEWORK = {
 # JWT Settings (optional customization)
 from datetime import timedelta
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+	# Tokens last for 1 day (adjustable).	
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': False,
 }
 
 TEMPLATES = [

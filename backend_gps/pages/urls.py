@@ -1,6 +1,7 @@
 from django.urls import path
 #from pages import views
 from . import views
+from .views import RegisterAPIView, LoginAPIView
 
 urlpatterns = [
 	
@@ -9,9 +10,8 @@ urlpatterns = [
     path('api/fleet/delete/<int:fleet_id>/', views.delete_fleet, name='delete-fleet'),
     
         # login
-    path('api/register/', views.register, name='register'),
-    path('api/login/', views.login, name='login'),
-
+    path('api/register/', RegisterAPIView.as_view(), name='register'),
+    path('api/login/', LoginAPIView.as_view(), name='login'),
 
     path('', views.index, name='index'),
     path("home/", views.home, name='home'),

@@ -1,19 +1,23 @@
-from django.http import HttpResponse, HttpResponseRedirect, Http404, JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import login, authenticate
-from django.contrib import messages
-from django.urls import reverse
 from datetime import datetime, time
 
-# Forms and Models
-from .models import Fleet, Brand, CarModel, Project
-from .forms import *
+from django.contrib import messages
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
+from django.http import HttpResponse, HttpResponseRedirect, Http404, JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 
-# Django REST Framework
+from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
+
+# Models
+from .models import Fleet, Brand, CarModel, Project
+
+# Forms
+from .forms import *
 
 # Serializers
 from .serializers import (
@@ -23,6 +27,7 @@ from .serializers import (
     UserSerializer,
     RegisterSerializer
 )
+
 
 
 def index(request):
@@ -226,7 +231,7 @@ def delete_fleet(request, fleet_id):
     
 # user login 
 
-# Generate JWT Token
+# Generate JWT Token for user
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
     return {
@@ -234,23 +239,31 @@ def get_tokens_for_user(user):
         'access': str(refresh.access_token),
     }
 
-# Register User
-@api_view(['POST'])
-def register(request):
-    serializer = RegisterSerializer(data=request.data)
-    if serializer.is_valid():
-        user = serializer.save()
-        return Response({'user': UserSerializer(user).data}, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+# User Registration API
+class RegisterAPIView(APIView):
+    def post(self, request):
+        serializer = RegisterSerializer(data=request.data)
+        if serializer.is_valid():
+            print("registerinnggg////")
+            user = serializer.save()
+            token = get_tokens_for_user(user)  # Generate JWT Token
+            return Response({"message": "User registered successfully", "token": token}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# Login User
-@api_view(['POST'])
-def login(request):
-    username = request.data.get('username')
-    password = request.data.get('password')
-    user = authenticate(username=username, password=password)
-    
-    if user:
-        token = get_tokens_for_user(user)
-        return Response({'token': token, 'user': UserSerializer(user).data})
-    return Response({'error': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+class LoginAPIView(APIView):
+    def post(self, request):
+        email = request.data.get("email")
+        password = request.data.get("password")
+        
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response({"error": "Invalid email or password"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        user = authenticate(username=user.username, password=password)
+
+        if user:
+            tokens = get_tokens_for_user(user)  # Generate JWT tokens
+            return Response({"message": "Login successful", "token": tokens["access"]}, status=status.HTTP_200_OK)
+        
+        return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
