@@ -1,19 +1,29 @@
-from django.http import HttpResponse, HttpResponseRedirect, Http404
-from .models import *
-from .forms import *
-import json
-from django.shortcuts import render, redirect,  get_object_or_404
+from django.http import HttpResponse, HttpResponseRedirect, Http404, JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
 from django.urls import reverse
 from datetime import datetime, time
 
-# api
-from django.http import JsonResponse
+# Forms and Models
+from .models import Fleet, Brand, CarModel, Project
+from .forms import *
+
+# Django REST Framework
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import Fleet, Brand, CarModel, Project
-from .serializers import FleetSerializer, BrandSerializer, CarModelSerializer
+from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
+
+# Serializers
+from .serializers import (
+    FleetSerializer,
+    BrandSerializer,
+    CarModelSerializer,
+    UserSerializer,
+    RegisterSerializer
+)
+
 
 def index(request):
     return render(request, "pages/stintGraph.html")
@@ -213,3 +223,34 @@ def delete_fleet(request, fleet_id):
         return Response({"message": "Fleet deleted successfully"}, status=204)
     except Fleet.DoesNotExist:
         return Response({"error": "Fleet not found"}, status=404)
+    
+# user login 
+
+# Generate JWT Token
+def get_tokens_for_user(user):
+    refresh = RefreshToken.for_user(user)
+    return {
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+    }
+
+# Register User
+@api_view(['POST'])
+def register(request):
+    serializer = RegisterSerializer(data=request.data)
+    if serializer.is_valid():
+        user = serializer.save()
+        return Response({'user': UserSerializer(user).data}, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# Login User
+@api_view(['POST'])
+def login(request):
+    username = request.data.get('username')
+    password = request.data.get('password')
+    user = authenticate(username=username, password=password)
+    
+    if user:
+        token = get_tokens_for_user(user)
+        return Response({'token': token, 'user': UserSerializer(user).data})
+    return Response({'error': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)

@@ -8,6 +8,11 @@ urlpatterns = [
     path('api/fleet/add/', views.add_fleet, name='add-fleet'),
     path('api/fleet/delete/<int:fleet_id>/', views.delete_fleet, name='delete-fleet'),
     
+        # login
+    path('api/register/', views.register, name='register'),
+    path('api/login/', views.login, name='login'),
+
+
     path('', views.index, name='index'),
     path("home/", views.home, name='home'),
     path("details/", views.project_index, name="project_index"),
@@ -23,6 +28,8 @@ urlpatterns = [
     path('fleetList/', views.fleet_list, name='fleet_list'),
 	path('carModel/', views.add_car_model, name='add_car_model'),
 	path('brand/', views.add_brand, name='add_brand'),
+	
+
 	
     #path('EditItem/<int:product_id>/', views.handle_edit_item_request, name='Edit Item')
 ]

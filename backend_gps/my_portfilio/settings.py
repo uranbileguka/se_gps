@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap4',
     'pages.apps.PagesConfig',
-    'corsheaders',
+	'rest_framework',
+    'corsheaders',  # CORS for frontend
 ]
 
 MIDDLEWARE = [
@@ -57,7 +58,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'my_portfilio.urls'
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
+    "http://localhost:3000",  # React Frontend
 ]
 
 TEMPLATES = [
@@ -87,6 +88,19 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+# JWT Settings (optional customization)
+from datetime import timedelta
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
 }
 
 TEMPLATES = [
