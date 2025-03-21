@@ -1,6 +1,6 @@
-import React from "react";
+import React from "react"; 
 import { useForm } from "react-hook-form";
-import { TextField, Button, MenuItem, Container, Typography, Box } from "@mui/material";
+import { TextField, Button, MenuItem, Container, Typography, Paper } from "@mui/material";
 
 const FleetModelForm = () => {
 	const { register, handleSubmit, formState: { errors }, watch } = useForm();
@@ -22,32 +22,51 @@ const FleetModelForm = () => {
 
 	return (
 		<Container maxWidth="sm">
-			<Box sx={{ bgcolor: "#002855", color: "#fff", p: 3, borderRadius: 2, textAlign: "center" }}>
-				<Typography variant="h5" gutterBottom>
+			<Paper elevation={3} sx={{ p: 4, borderRadius: 3, bgcolor: "#ffffff", color: "#333", boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)" }}>
+				<Typography variant="h5" align="center" gutterBottom sx={{ fontWeight: "bold", color: "#1976d2" }}>
 					Fleet Model Form
 				</Typography>
 				<form onSubmit={handleSubmit(onSubmit)}>
 					{/* Model name */}
 					<TextField
-						label="Fleet model name"
+						label="Fleet Model Name"
 						fullWidth
 						margin="normal"
 						{...register("fleetNumber", { required: "Fleet number is required" })}
 						error={!!errors.fleetNumber}
 						helperText={errors.fleetNumber?.message}
+						sx={{ bgcolor: "#f9f9f9", borderRadius: 1 }}
 					/>	
+
 					{/* Brand */}
 					<TextField
 						select
 						label="Brand"
 						fullWidth
 						margin="normal"
+						{...register("brand", { required: "Please select a brand" })}
+						error={!!errors.brand}
+						helperText={errors.brand?.message}
+						sx={{ bgcolor: "#f9f9f9", borderRadius: 1 }}
+					>
+						{Object.keys(carModels).map((brand) => (
+							<MenuItem key={brand} value={brand}>
+								{brand}
+							</MenuItem>
+						))}
+					</TextField>
+
+					{/* Car Model */}
+					<TextField
+						select
+						label="Car Model"
+						fullWidth
+						margin="normal"
 						disabled={!selectedBrand}
-						{...register("model", {
-							required: "Please select a model",
-						})}
+						{...register("model", { required: "Please select a model" })}
 						error={!!errors.model}
 						helperText={errors.model?.message}
+						sx={{ bgcolor: "#f9f9f9", borderRadius: 1 }}
 					>
 						{selectedBrand &&
 							carModels[selectedBrand]?.map((model) => (
@@ -57,11 +76,11 @@ const FleetModelForm = () => {
 							))}
 					</TextField>
 
-					<Button type="submit" variant="contained" sx={{ mt: 2, backgroundColor: "#f5b700", color: "#000" }}>
+					<Button type="submit" variant="contained" fullWidth sx={{ mt: 2, bgcolor: "#1976d2", color: "#fff", fontWeight: "bold", '&:hover': { bgcolor: "#1565c0" } }}>
 						Submit
 					</Button>
 				</form>
-			</Box>
+			</Paper>
 		</Container>
 	);
 };
