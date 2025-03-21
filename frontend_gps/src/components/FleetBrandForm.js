@@ -7,7 +7,8 @@ import {
 	Typography,
 	Box,
 	Snackbar,
-	Alert
+	Alert,
+	Paper,
 } from "@mui/material";
 import { createBrand, updateBrand } from "../api";
 
@@ -52,8 +53,8 @@ const FleetBrandForm = ({ editBrand, onSuccess }) => {
 
 	return (
 		<Container maxWidth="sm">
-			<Box sx={{ bgcolor: "#002855", color: "#fff", p: 3, borderRadius: 2, textAlign: "center" }}>
-				<Typography variant="h5" gutterBottom>
+			<Paper elevation={3} sx={{ p: 4, borderRadius: 3, bgcolor: "#ffffff", color: "#333", boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)" }}>
+				<Typography variant="h5" align="center" gutterBottom sx={{ fontWeight: "bold", color: "#1976d2" }}>
 					{editBrand ? "Edit Brand" : "Add Brand"}
 				</Typography>
 				<form onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -64,13 +65,14 @@ const FleetBrandForm = ({ editBrand, onSuccess }) => {
 						{...register("brandName", { required: "Brand name is required" })}
 						error={!!errors.brandName}
 						helperText={errors.brandName?.message}
+						sx={{ bgcolor: "#f9f9f9", borderRadius: 1 }}
 					/>
 
-					<Button type="submit" variant="contained" sx={{ mt: 2, backgroundColor: "#f5b700", color: "#000" }}>
+					<Button type="submit" variant="contained" fullWidth sx={{ mt: 2, bgcolor: "#1976d2", color: "#fff", fontWeight: "bold", '&:hover': { bgcolor: "#1565c0" } }}>
 						{editBrand ? "Update" : "Submit"}
 					</Button>
 				</form>
-			</Box>
+			</Paper>
 
 			<Snackbar
 				open={successOpen}
