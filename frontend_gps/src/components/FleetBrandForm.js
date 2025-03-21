@@ -7,7 +7,7 @@ import {
 	Typography,
 	Box,
 	Snackbar,
-	Alert,
+	Alert
 } from "@mui/material";
 import { createBrand, updateBrand } from "../api";
 
@@ -41,7 +41,7 @@ const FleetBrandForm = ({ editBrand, onSuccess }) => {
 			}
 			setSuccessOpen(true);
 			reset();
-			onSuccess(); // Refresh list
+			onSuccess(); // Refresh list and hide form after update
 		} catch (error) {
 			setError("brandName", {
 				type: "manual",
@@ -79,7 +79,7 @@ const FleetBrandForm = ({ editBrand, onSuccess }) => {
 				anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
 			>
 				<Alert onClose={() => setSuccessOpen(false)} severity="success" sx={{ width: "100%" }}>
-					{editBrand ? "Brand updated!" : "Brand successfully added!"}
+					{editBrand ? "Brand updated successfully!" : "Brand successfully added!"}
 				</Alert>
 			</Snackbar>
 		</Container>
