@@ -31,3 +31,14 @@ export const logout = () => {
 export const getFleetData = async () => {
   return axios.get(`${API_URL}/fleet/`);
 };
+
+// /create brand
+export const createBrand = async (brandName) => {
+	try {
+		const response = await axios.post(`${API_URL}/brands/`, { name: brandName });
+		return response.data;
+	} catch (error) {
+		// Optional: console.log(error.response) for debugging
+		throw error.response?.data || error.message;
+	}
+};

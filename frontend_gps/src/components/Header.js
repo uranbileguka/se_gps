@@ -50,11 +50,29 @@ const Header = () => {
             <ListItem button component={Link} to="/">
               <ListItemText primary="Home" />
             </ListItem>
-            
+
             {/* Fleet Option Only If Logged In */}
             {isLoggedIn() && (
               <ListItem button component={Link} to="/fleet">
                 <ListItemText primary="Fleet" />
+              </ListItem>
+            )}
+            {/* Fleet Option Only If Logged In */}
+            {isLoggedIn() && (
+              <ListItem button component={Link} to="/fleet-form">
+                <ListItemText primary="Fleet form" />
+              </ListItem>
+            )}
+            {/* Fleet Option Only If Logged In */}
+            {isLoggedIn() && (
+              <ListItem button component={Link} to="/fleet-model-form">
+                <ListItemText primary="Fleet model form" />
+              </ListItem>
+            )}
+            {/* Fleet Option Only If Logged In */}
+            {isLoggedIn() && (
+              <ListItem button component={Link} to="/fleet-brand-form">
+                <ListItemText primary="Fleet brand form" />
               </ListItem>
             )}
           </List>
