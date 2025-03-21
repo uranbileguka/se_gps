@@ -1,34 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { TextField, Button, Container, Typography, Box } from "@mui/material";
-import { createBrand } from "../api"; // adjust the path based on your project structure
+import { TextField, Button, Container, Typography, Box, Snackbar, Alert } from "@mui/material";
+import { createBrand } from "../api"; // Adjust path as needed
 
 const FleetBrandForm = () => {
 	const { register, handleSubmit, formState: { errors }, reset, setError } = useForm();
+	const [successOpen, setSuccessOpen] = useState(false); // Snackbar state
 
 	const onSubmit = async (data) => {
 		console.log("Submitting:", data);
-	
+
 		try {
 			await createBrand(data.brandName);
-			console.log("Brand created successfully");
-			reset(); // Clear the form
+			reset();
+			setSuccessOpen(true); // Show success snackbar
 		} catch (error) {
 			console.error("Error creating brand:", error);
-	
-			// Handle Django validation error (duplicate brand)
+
 			const message =
-				error?.name?.[0] || // e.g. "brand with this name already exists."
-				error?.message ||   // fallback
+				error?.name?.[0] ||
+				error?.message ||
 				"Failed to create brand";
-	
+
 			setError("brandName", {
 				type: "manual",
 				message: message,
 			});
 		}
 	};
-	
 
 	return (
 		<Container maxWidth="sm">
@@ -36,7 +35,7 @@ const FleetBrandForm = () => {
 				<Typography variant="h5" gutterBottom>
 					Fleet Brand Form
 				</Typography>
-				<form onSubmit={handleSubmit(onSubmit)}>
+				<form onSubmit={handleSubmit(onSubmit)} noValidate>
 					<TextField
 						label="Brand Name"
 						fullWidth
@@ -51,6 +50,18 @@ const FleetBrandForm = () => {
 					</Button>
 				</form>
 			</Box>
+
+			{/* Success Snackbar */}
+			<Snackbar
+				open={successOpen}
+				autoHideDuration={3000}
+				onClose={() => setSuccessOpen(false)}
+				anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+			>
+				<Alert onClose={() => setSuccessOpen(false)} severity="success" sx={{ width: '100%' }}>
+					Brand successfully added!
+				</Alert>
+			</Snackbar>
 		</Container>
 	);
 };

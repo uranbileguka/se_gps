@@ -7,6 +7,7 @@ import Fleet from "./components/Fleet";
 import FleetForm from "./components/FleetForm";
 import FleetBrandForm from "./components/FleetBrandForm";
 import FleetModelForm from "./components/FleetModelForm";
+import Brand from "./components/Brand";
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/fleet" element={<Fleet />} />
+        <Route path="/brand" element={<Brand />} />
         <Route path="/fleet-form" element={<FleetForm />} />
         <Route path="/fleet-model-form" element={< FleetModelForm/>} />
         <Route path="/fleet-brand-form" element={<FleetBrandForm />} />

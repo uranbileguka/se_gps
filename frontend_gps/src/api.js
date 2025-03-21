@@ -32,6 +32,11 @@ export const getFleetData = async () => {
   return axios.get(`${API_URL}/fleet/`);
 };
 
+export const getBrandData = async () => {
+  return axios.get(`${API_URL}/brandList/`);
+};
+
+
 // /create brand
 export const createBrand = async (brandName) => {
 	try {

@@ -274,3 +274,8 @@ class LoginAPIView(APIView):
 class BrandCreateView(generics.CreateAPIView):
     queryset = Brand.objects.all()
     serializer_class = BrandSerializer
+
+# api
+class BrandListView(generics.ListAPIView):
+    queryset = Brand.objects.all()
+    serializer_class = BrandSerializer
