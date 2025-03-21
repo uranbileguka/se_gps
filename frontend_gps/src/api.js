@@ -27,10 +27,10 @@ export const logout = () => {
   localStorage.removeItem('refresh_token');
 };
 
-// fleet
-export const getFleetData = async () => {
-  return axios.get(`${API_URL}/fleet/`);
-};
+// // fleet
+// export const getFleetData = async () => {
+//   return axios.get(`${API_URL}/fleet/`);
+// };
 
 
 //**BRAND
@@ -86,4 +86,26 @@ export const updateCarModel = async (id, name, brandId) => {
 // Delete a car model
 export const deleteCarModel = async (id) => {
   return axios.delete(`${API_URL}/carmodels/${id}/`);
+};
+
+// /FLEET
+// Get all fleets
+export const getFleetData = async () => {
+  return axios.get(`${API_URL}/fleets/`);
+};
+
+// Create new fleet
+export const createFleet = async (fleetData) => {
+  console.log(fleetData);
+  return axios.post(`${API_URL}/fleets/create/`, fleetData);
+};
+
+// Update fleet
+export const updateFleet = async (id, fleetData) => {
+  return axios.put(`${API_URL}/fleets/${id}/`, fleetData);
+};
+
+// Delete fleet
+export const deleteFleet = async (id) => {
+  return axios.delete(`${API_URL}/fleets/${id}/`);
 };

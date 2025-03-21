@@ -2,6 +2,7 @@ from django.urls import path
 #from pages import views
 from . import views
 from .views import RegisterAPIView, LoginAPIView, BrandCreateView, BrandListView, BrandDetailView, CarModelListView, CarModelCreateView, CarModelDetailView
+from .views import FleetListView, FleetCreateView, FleetDetailView
 
 urlpatterns = [
 	
@@ -14,6 +15,9 @@ urlpatterns = [
     path("api/carmodels/", CarModelListView.as_view(), name="car-model-list"),
     path("api/carmodels/create/", CarModelCreateView.as_view(), name="car-model-create"),
     path("api/carmodels/<int:pk>/", CarModelDetailView.as_view(), name="car-model-detail"),
+    path("api/fleets/", FleetListView.as_view(), name="fleet-list"),
+    path("api/fleets/create/", FleetCreateView.as_view(), name="fleet-create"),
+    path("api/fleets/<int:pk>/", FleetDetailView.as_view(), name="fleet-detail"),	
 	
         # login
     path('api/register/', RegisterAPIView.as_view(), name='register'),

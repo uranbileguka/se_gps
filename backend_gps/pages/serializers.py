@@ -2,10 +2,20 @@ from rest_framework import serializers
 from .models import Fleet, Brand, CarModel
 from django.contrib.auth.models import User
 
+# class FleetSerializer(serializers.ModelSerializer):
+#     brand_name = serializers.CharField(source="brand.name", read_only=True)
+#     car_model_name = serializers.CharField(source="car_model.name", read_only=True)
+
+#     class Meta:
+#         model = Fleet
+#         fields = ["id", "fleet_id", "fleet_number", "gps_tracker_id", "state_number", 
+#                   "manufacture_date", "brand", "brand_name", "car_model", "car_model_name"]
+
 class FleetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Fleet
         fields = '__all__'
+
 
 class BrandSerializer(serializers.ModelSerializer):
     class Meta:

@@ -333,3 +333,33 @@ class CarModelDetailView(generics.RetrieveUpdateDestroyAPIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+    
+# Fleet
+
+# Create Fleet
+class FleetCreateView(generics.CreateAPIView):
+    queryset = Fleet.objects.all()
+    serializer_class = FleetSerializer
+
+# List Fleets
+class FleetListView(generics.ListAPIView):
+    queryset = Fleet.objects.all()
+    serializer_class = FleetSerializer
+
+# Retrieve, Update, and Delete Fleet
+class FleetDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Fleet.objects.all()
+    serializer_class = FleetSerializer
+
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.delete()
+        return Response({"message": "Fleet deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+
+    def put(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
