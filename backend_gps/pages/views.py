@@ -279,3 +279,24 @@ class BrandCreateView(generics.CreateAPIView):
 class BrandListView(generics.ListAPIView):
     queryset = Brand.objects.all()
     serializer_class = BrandSerializer
+
+# update and delete
+class BrandDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """Handles getting a single brand, updating, and deleting"""
+    queryset = Brand.objects.all()
+    serializer_class = BrandSerializer
+
+    def delete(self, request, *args, **kwargs):
+        """Handles DELETE request for a brand"""
+        instance = self.get_object()
+        instance.delete()
+        return Response({"message": "Brand deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+
+    def put(self, request, *args, **kwargs):
+        """Handles PUT (update) request"""
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)  # Allow partial updates
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    

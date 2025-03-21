@@ -1,7 +1,7 @@
 from django.urls import path
 #from pages import views
 from . import views
-from .views import RegisterAPIView, LoginAPIView, BrandCreateView, BrandListView
+from .views import RegisterAPIView, LoginAPIView, BrandCreateView, BrandListView, BrandDetailView
 
 urlpatterns = [
 	
@@ -10,6 +10,7 @@ urlpatterns = [
     path('api/fleet/delete/<int:fleet_id>/', views.delete_fleet, name='delete-fleet'),
     path('api/brands/', BrandCreateView.as_view(), name='brand-create'),
     path('api/brandList/', BrandListView.as_view(), name='brand-list'),
+    path('api/brands/<int:pk>/', BrandDetailView.as_view(), name='brand-detail'),  # Retrieve, Update, Delete
 
         # login
     path('api/register/', RegisterAPIView.as_view(), name='register'),

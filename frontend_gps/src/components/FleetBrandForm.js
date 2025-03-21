@@ -1,30 +1,51 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { TextField, Button, Container, Typography, Box, Snackbar, Alert } from "@mui/material";
-import { createBrand } from "../api"; // Adjust path as needed
+import {
+	TextField,
+	Button,
+	Container,
+	Typography,
+	Box,
+	Snackbar,
+	Alert,
+} from "@mui/material";
+import { createBrand, updateBrand } from "../api";
 
-const FleetBrandForm = () => {
-	const { register, handleSubmit, formState: { errors }, reset, setError } = useForm();
-	const [successOpen, setSuccessOpen] = useState(false); // Snackbar state
+const FleetBrandForm = ({ editBrand, onSuccess }) => {
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+		reset,
+		setError,
+		setValue,
+	} = useForm();
+
+	const [successOpen, setSuccessOpen] = useState(false);
+
+	// Populate form in edit mode
+	useEffect(() => {
+		if (editBrand) {
+			setValue("brandName", editBrand.name);
+		} else {
+			reset();
+		}
+	}, [editBrand, reset, setValue]);
 
 	const onSubmit = async (data) => {
-		console.log("Submitting:", data);
-
 		try {
-			await createBrand(data.brandName);
+			if (editBrand) {
+				await updateBrand(editBrand.id, data.brandName);
+			} else {
+				await createBrand(data.brandName);
+			}
+			setSuccessOpen(true);
 			reset();
-			setSuccessOpen(true); // Show success snackbar
+			onSuccess(); // Refresh list
 		} catch (error) {
-			console.error("Error creating brand:", error);
-
-			const message =
-				error?.name?.[0] ||
-				error?.message ||
-				"Failed to create brand";
-
 			setError("brandName", {
 				type: "manual",
-				message: message,
+				message: error.name?.[0] || error.message || "Operation failed",
 			});
 		}
 	};
@@ -33,7 +54,7 @@ const FleetBrandForm = () => {
 		<Container maxWidth="sm">
 			<Box sx={{ bgcolor: "#002855", color: "#fff", p: 3, borderRadius: 2, textAlign: "center" }}>
 				<Typography variant="h5" gutterBottom>
-					Fleet Brand Form
+					{editBrand ? "Edit Brand" : "Add Brand"}
 				</Typography>
 				<form onSubmit={handleSubmit(onSubmit)} noValidate>
 					<TextField
@@ -46,20 +67,19 @@ const FleetBrandForm = () => {
 					/>
 
 					<Button type="submit" variant="contained" sx={{ mt: 2, backgroundColor: "#f5b700", color: "#000" }}>
-						Submit
+						{editBrand ? "Update" : "Submit"}
 					</Button>
 				</form>
 			</Box>
 
-			{/* Success Snackbar */}
 			<Snackbar
 				open={successOpen}
 				autoHideDuration={3000}
 				onClose={() => setSuccessOpen(false)}
 				anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
 			>
-				<Alert onClose={() => setSuccessOpen(false)} severity="success" sx={{ width: '100%' }}>
-					Brand successfully added!
+				<Alert onClose={() => setSuccessOpen(false)} severity="success" sx={{ width: "100%" }}>
+					{editBrand ? "Brand updated!" : "Brand successfully added!"}
 				</Alert>
 			</Snackbar>
 		</Container>

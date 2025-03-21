@@ -32,8 +32,21 @@ export const getFleetData = async () => {
   return axios.get(`${API_URL}/fleet/`);
 };
 
+
+//**BRAND
+//get brand
 export const getBrandData = async () => {
   return axios.get(`${API_URL}/brandList/`);
+};
+
+// Delete brand
+export const deleteBrand = async (id) => {
+	return axios.delete(`${API_URL}/brands/${id}/`);
+};
+
+// Update brand
+export const updateBrand = async (id, name) => {
+	return axios.put(`${API_URL}/brands/${id}/`, { name });
 };
 
 
