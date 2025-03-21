@@ -300,3 +300,36 @@ class BrandDetailView(generics.RetrieveUpdateDestroyAPIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+    
+
+## CAR MODEL
+#  Create CarModel
+class CarModelCreateView(generics.CreateAPIView):
+    queryset = CarModel.objects.all()
+    serializer_class = CarModelSerializer
+
+# List CarModels
+class CarModelListView(generics.ListAPIView):
+    queryset = CarModel.objects.all()
+    serializer_class = CarModelSerializer
+
+# Retrieve, Update, and Delete CarModel
+class CarModelDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """Handles getting a single car model, updating, and deleting"""
+    queryset = CarModel.objects.all()
+    serializer_class = CarModelSerializer
+
+    def delete(self, request, *args, **kwargs):
+        """Handles DELETE request for a car model"""
+        instance = self.get_object()
+        instance.delete()
+        return Response({"message": "Car model deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+
+    def put(self, request, *args, **kwargs):
+        """Handles PUT (update) request"""
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)  # Allow partial updates
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    

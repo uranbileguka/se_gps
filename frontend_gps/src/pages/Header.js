@@ -81,6 +81,12 @@ const Header = () => {
                 <ListItemText primary="Brand list" />
               </ListItem>
             )}
+            {/* Fleet Option Only If Logged In */}
+            {isLoggedIn() && (
+              <ListItem button component={Link} to="/CarModelManager">
+                <ListItemText primary="Car model manager" />
+              </ListItem>
+            )}            
           </List>
         </Box>
       </Drawer>

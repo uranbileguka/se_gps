@@ -9,6 +9,8 @@ import FleetForm from "./components/FleetForm";
 import FleetBrandForm from "./components/FleetBrandForm";
 import FleetModelForm from "./components/FleetModelForm";
 import Brand from "./components/Brand";
+import CarModelManager from "./components/CarModelManager";
+
 
 const App = () => {
   return (
@@ -23,6 +25,7 @@ const App = () => {
         <Route path="/fleet-form" element={<FleetForm />} />
         <Route path="/fleet-model-form" element={< FleetModelForm/>} />
         <Route path="/fleet-brand-form" element={<FleetBrandForm />} />
+        <Route path="/CarModelManager" element={<CarModelManager />} />
 
       </Routes>
     </Router>

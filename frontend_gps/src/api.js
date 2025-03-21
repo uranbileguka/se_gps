@@ -60,3 +60,30 @@ export const createBrand = async (brandName) => {
 		throw error.response?.data || error.message;
 	}
 };
+
+// Car model
+// / Fetch all car models
+export const getCarModelData = async () => {
+  return axios.get(`${API_URL}/carmodels/`);
+};
+
+// Create a new car model
+export const createCarModel = async (name, brandId) => {
+  return axios.post(`${API_URL}/carmodels/create/`, {
+    name,
+    brand: brandId,
+  });
+};
+
+// Update a car model
+export const updateCarModel = async (id, name, brandId) => {
+  return axios.put(`${API_URL}/carmodels/${id}/`, {
+    name,
+    brand: brandId,
+  });
+};
+
+// Delete a car model
+export const deleteCarModel = async (id) => {
+  return axios.delete(`${API_URL}/carmodels/${id}/`);
+};

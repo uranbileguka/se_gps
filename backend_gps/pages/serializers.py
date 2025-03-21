@@ -12,10 +12,14 @@ class BrandSerializer(serializers.ModelSerializer):
         model = Brand
         fields = '__all__'
 
+# it s gonna give car brand too
 class CarModelSerializer(serializers.ModelSerializer):
+    brand_name = serializers.CharField(source="brand.name", read_only=True)
+
     class Meta:
         model = CarModel
-        fields = '__all__'
+        fields = ["id", "name", "brand", "brand_name"]
+
 
 # user login
 class UserSerializer(serializers.ModelSerializer):
