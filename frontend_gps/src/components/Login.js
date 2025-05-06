@@ -14,7 +14,7 @@ const Login = () => {
 
       alert("Login successful!");
       localStorage.setItem("token", response.token); // Store token for authentication
-      window.location.href = "/dashboard"; // Redirect after login
+      window.location.href = "/zoneReport"; // Redirect after login
     } catch (error) {
       console.error("Login failed:", error);
       alert("Login failed: " + (error.error || "Invalid credentials"));
@@ -25,7 +25,7 @@ const Login = () => {
     <div
       className="d-flex align-items-center justify-content-center vh-100"
       style={{
-        backgroundImage: "url('/fleet-background.jpeg')", // Updated background image
+        backgroundImage: "url('/FleetManagementBackground.jpeg')", // Updated background image
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",

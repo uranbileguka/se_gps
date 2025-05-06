@@ -47,16 +47,16 @@ const CarModelManager = () => {
   const handleCreate = async () => {
     if (!newModelName || !selectedBrandId) return;
     await createCarModel(newModelName, selectedBrandId);
-    setSuccessMessage("Car model added successfully!");
+    setSuccessMessage("Fleet model added successfully!");
     setNewModelName("");
     setSelectedBrandId("");
     fetchData();
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this car model?")) {
+    if (window.confirm("Are you sure you want to delete this Fleet model?")) {
       await deleteCarModel(id);
-      setSuccessMessage("Car model deleted successfully!");
+      setSuccessMessage("Fleet model deleted successfully!");
       fetchData();
     }
   };
@@ -64,14 +64,14 @@ const CarModelManager = () => {
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h5" gutterBottom>
-        Car Model Manager
+        Fleet model Manager
       </Typography>
 
       <Box component={Paper} sx={{ p: 3, mb: 3 }}>
-        <Typography variant="h6">Add New Car Model</Typography>
+        <Typography variant="h6">Add New Fleet model</Typography>
         <Box display="flex" gap={2} mt={2}>
           <TextField
-            label="Car Model Name"
+            label="Fleet model Name"
             value={newModelName}
             onChange={(e) => setNewModelName(e.target.value)}
             fullWidth
@@ -96,7 +96,7 @@ const CarModelManager = () => {
       </Box>
 
       <Paper sx={{ p: 3 }}>
-        <Typography variant="h6">Car Model List</Typography>
+        <Typography variant="h6">Fleet model List</Typography>
         <List>
           {carModels.map((model) => (
             <ListItem

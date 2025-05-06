@@ -10,6 +10,22 @@ class GpsTracker(models.Model):
 	def __str__(self):
 		return self.name
 
+class TrackPoint(models.Model):
+	name = models.CharField(max_length=100)
+	address = models.TextField(blank=True)
+	description = models.CharField(max_length=255)
+	timestamp = models.DateTimeField()
+	latitude = models.FloatField()
+	longitude = models.FloatField()
+	altitude = models.FloatField()
+	speed = models.IntegerField()
+	heading = models.IntegerField()
+	tracker_id = models.ForeignKey(GpsTracker, related_name='track_points', on_delete=models.SET_NULL, null=True)
+	technic = models.ForeignKey(Fleet, on_delete=models.CASCADE, null=True)
+
+	def __str__(self):
+		return f"{self.name} at {self.timestamp}"
+	
 class GpsZone(models.Model):
 	name = models.CharField(max_length=255)
 	english_name = models.CharField(max_length=255, null=True)

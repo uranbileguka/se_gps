@@ -11,6 +11,7 @@ import {
 	Paper,
 } from "@mui/material";
 import { createBrand, updateBrand } from "../api";
+import { useNavigate } from "react-router-dom"; // ✅ Import React Router
 
 const FleetBrandForm = ({ editBrand, onSuccess }) => {
 	const {
@@ -32,7 +33,7 @@ const FleetBrandForm = ({ editBrand, onSuccess }) => {
 			reset();
 		}
 	}, [editBrand, reset, setValue]);
-
+	const navigate = useNavigate(); 
 	const onSubmit = async (data) => {
 		try {
 			if (editBrand) {
@@ -42,7 +43,9 @@ const FleetBrandForm = ({ editBrand, onSuccess }) => {
 			}
 			setSuccessOpen(true);
 			reset();
-			onSuccess(); // Refresh list and hide form after update
+			// onSuccess();
+			setTimeout(() => navigate("/brand"), 1500); // ✅ Redirect to Fleet List
+			// Refresh list and hide form after update
 		} catch (error) {
 			setError("brandName", {
 				type: "manual",

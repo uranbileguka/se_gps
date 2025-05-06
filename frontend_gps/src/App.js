@@ -13,6 +13,7 @@ import CarModelManager from "./components/CarModelManager";
 import ZoneReport from "./components/ZoneReport";
 import FleetUtilizationReport from "./components/FleetUtilizationReport";
 import FuelReport from "./components/FuelReport";
+import TrackPoint from "./components/TrackPoint";
 
 
 const App = () => {
@@ -20,9 +21,10 @@ const App = () => {
     <Router>
       <Header />
       <Routes>
-        <Route path="/" element={<Dashboard/>} /> 
+        <Route path="/" element={<ZoneReport/>} /> 
         <Route path="/login" element={<Login />} />
         <Route path="/zoneReport" element={<ZoneReport />} />
+        <Route path="/trackPoints" element={<TrackPoint />} />
         <Route path="/fuelReport" element={<FuelReport />} />
         <Route path="/utilizationReport" element={<FleetUtilizationReport />} />
         <Route path="/signup" element={<Signup />} />

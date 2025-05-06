@@ -1,35 +1,39 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { AppBar, Toolbar, Typography, Button, Box, Drawer, List, ListItem, ListItemText, IconButton } from "@mui/material";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Box,
+  Drawer,
+  List,
+  ListItemButton,
+  ListItemText,
+  IconButton,
+} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { isLoggedIn, logout } from "../auth"; // Import auth functions
+import { isLoggedIn, logout } from "../auth";
 
 const Header = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // Toggle sidebar visibility
   const toggleSidebar = (open) => () => {
     setSidebarOpen(open);
   };
 
   return (
     <>
-      {/* Top Navigation Bar */}
       <AppBar position="static">
         <Toolbar>
-          {/* Sidebar Toggle Button */}
           {isLoggedIn() && (
-            <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleSidebar(true)}>
+            <IconButton edge="start" color="inherit" onClick={toggleSidebar(true)}>
               <MenuIcon />
             </IconButton>
           )}
-
-          {/* App Name */}
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            MyApp
+            Fleet management system
           </Typography>
-
-          {/* Top Navbar - Login/Logout Buttons */}
           <Box sx={{ display: "flex", gap: 2 }}>
             {isLoggedIn() ? (
               <Button color="inherit" onClick={logout}>Logout</Button>
@@ -43,64 +47,53 @@ const Header = () => {
         </Toolbar>
       </AppBar>
 
-      {/* Sidebar (Drawer) */}
       <Drawer anchor="left" open={sidebarOpen} onClose={toggleSidebar(false)}>
         <Box sx={{ width: 250 }} role="presentation" onClick={toggleSidebar(false)}>
           <List>
-            <ListItem button component={Link} to="/">
-              <ListItemText primary="Home" />
-            </ListItem>
+
+            {/* Reports (Always Expanded) */}
             {isLoggedIn() && (
-              <ListItem button component={Link} to="/zoneReport">
-                <ListItemText primary="Zone report" />
-              </ListItem>
+              <>
+                <ListItemButton>
+                  <ListItemText primary="Reports" />
+                </ListItemButton>
+                <List component="div" disablePadding>
+                  <ListItemButton component={Link} to="/zoneReport" sx={{ pl: 4 }}>
+                    <ListItemText primary="Zone report" />
+                  </ListItemButton>
+                  <ListItemButton component={Link} to="/utilizationReport" sx={{ pl: 4 }}>
+                    <ListItemText primary="Fleet utilization" />
+                  </ListItemButton>
+                  <ListItemButton component={Link} to="/fuelReport" sx={{ pl: 4 }}>
+                    <ListItemText primary="Fuel usage" />
+                  </ListItemButton>
+                  <ListItemButton component={Link} to="/trackPoints" sx={{ pl: 4 }}>
+                    <ListItemText primary="Track points" />
+                  </ListItemButton>                  
+                </List>
+                
+              </>
             )}
+
+            {/* Fleet (Always Expanded) */}
             {isLoggedIn() && (
-              <ListItem button component={Link} to="/utilizationReport">
-                <ListItemText primary="Fleet utilization report" />
-              </ListItem>
+              <>
+                <ListItemButton>
+                  <ListItemText primary="Fleet registration" />
+                </ListItemButton>
+                <List component="div" disablePadding>
+                  <ListItemButton component={Link} to="/fleet" sx={{ pl: 4 }}>
+                    <ListItemText primary="Fleet" />
+                  </ListItemButton>
+                  <ListItemButton component={Link} to="/brand" sx={{ pl: 4 }}>
+                    <ListItemText primary="Fleet brand" />
+                  </ListItemButton>
+                  <ListItemButton component={Link} to="/CarModelManager" sx={{ pl: 4 }}>
+                    <ListItemText primary="Fleet model" />
+                  </ListItemButton>
+                </List>
+              </>
             )}
-            {isLoggedIn() && (
-              <ListItem button component={Link} to="/fuelReport">
-                <ListItemText primary="Fuel usage report" />
-              </ListItem>
-            )}                        
-            {/* Fleet Option Only If Logged In */}
-            {isLoggedIn() && (
-              <ListItem button component={Link} to="/fleet">
-                <ListItemText primary="Fleet" />
-              </ListItem>
-            )}
-            {/* Fleet Option Only If Logged In */}
-            {isLoggedIn() && (
-              <ListItem button component={Link} to="/fleet-form">
-                <ListItemText primary="Fleet form" />
-              </ListItem>
-            )}
-            {/* Fleet Option Only If Logged In */}
-            {isLoggedIn() && (
-              <ListItem button component={Link} to="/fleet-model-form">
-                <ListItemText primary="Fleet model form" />
-              </ListItem>
-            )}
-            {/* Fleet Option Only If Logged In */}
-            {isLoggedIn() && (
-              <ListItem button component={Link} to="/fleet-brand-form">
-                <ListItemText primary="Fleet brand form" />
-              </ListItem>
-            )}
-            {/* Fleet Option Only If Logged In */}
-            {isLoggedIn() && (
-              <ListItem button component={Link} to="/brand">
-                <ListItemText primary="Brand list" />
-              </ListItem>
-            )}
-            {/* Fleet Option Only If Logged In */}
-            {isLoggedIn() && (
-              <ListItem button component={Link} to="/CarModelManager">
-                <ListItemText primary="Car model manager" />
-              </ListItem>
-            )}            
           </List>
         </Box>
       </Drawer>

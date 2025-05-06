@@ -14,6 +14,7 @@ urlpatterns = [
     path('api/motohourCountByDate/', views.motohour_count_by_date, name='motohour_count_by_date'),
     path('api/fuelCountByTechnic/', views.fuel_count_by_technic, name='fuel_count_by_technic'),
     path('api/fuelCountByDate/', views.fuel_count_by_date, name='fuel_count_by_date'),
+    path('api/trackpoint/', views.trackpoint, name='trackpoint'),	
 ]
     #path('EditItem/<int:product_id>/', views.handle_edit_item_request, name='Edit Item')
 

@@ -9,10 +9,10 @@ const FleetModelForm = () => {
 		console.log("Form Submitted:", data);
 	};
 
-	// Watch selected brand to filter car models dynamically
+	// Watch selected brand to filter Fleet models dynamically
 	const selectedBrand = watch("brand");
 
-	// Car models based on selected brand
+	// Fleet models based on selected brand
 	const carModels = {
 		Toyota: ["Corolla", "Camry", "Rav4", "Hilux"],
 		Honda: ["Civic", "Accord", "CR-V", "Pilot"],
@@ -56,10 +56,10 @@ const FleetModelForm = () => {
 						))}
 					</TextField>
 
-					{/* Car Model */}
+					{/* Fleet model */}
 					<TextField
 						select
-						label="Car Model"
+						label="Fleet model"
 						fullWidth
 						margin="normal"
 						disabled={!selectedBrand}

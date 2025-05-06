@@ -14,8 +14,10 @@ import {
   Box,
   Snackbar,
   Alert,
+  Button ,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import AddIcon from "@mui/icons-material/Add";
 
 const Fleet = () => {
   const [fleets, setFleets] = useState([]);
@@ -57,6 +59,17 @@ const Fleet = () => {
 
   return (
     <Box>
+      <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mt: 4, px: 3 }}>
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<AddIcon />}
+          onClick={() => navigate("/fleet-form")}
+          sx={{ fontWeight: 'bold' }}
+        >
+          Add Fleet
+        </Button>
+      </Box>
       <TableContainer component={Paper} sx={{ mt: 5, p: 3 }}>
         <Typography variant="h5" sx={{ mb: 2 }}>Fleet Information</Typography>
         <Table>
@@ -65,7 +78,7 @@ const Fleet = () => {
               <TableCell>Fleet ID</TableCell>
               <TableCell>Fleet Number</TableCell>
               <TableCell>Brand</TableCell>
-              <TableCell>Car Model</TableCell>
+              <TableCell>Fleet model</TableCell>
               <TableCell>GPS Tracker ID</TableCell>
               <TableCell>State Number</TableCell>
               <TableCell>Manufacture Date</TableCell>

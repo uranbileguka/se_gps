@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
+from xml.etree import ElementTree as ET
 
 def flatten_trip(res, token):
     if not check_token(token):
@@ -146,3 +147,36 @@ def check_token(token):
         return True
     return False
         
+def flatten_kml_placemarks(kml_string):
+    root = ET.fromstring(kml_string)
+    ns = {'kml': 'http://www.opengis.net/kml/2.2'}
+
+    placemarks = []
+    for placemark in root.findall(".//kml:Placemark", ns):
+        name = placemark.findtext("kml:name", default="", namespaces=ns)
+        address = placemark.findtext("kml:address", default="", namespaces=ns)
+        timestamp = placemark.findtext("kml:TimeStamp/kml:when", default="", namespaces=ns)
+        description = placemark.findtext("kml:description", default="", namespaces=ns)
+        coordinates = placemark.findtext("kml:Point/kml:coordinates", default="", namespaces=ns)
+        speed = placemark.findtext(".//kml:ExtendedData/kml:Data[@name='speed']/kml:value", default="", namespaces=ns)
+        heading = placemark.findtext(".//kml:ExtendedData/kml:Data[@name='heading']/kml:value", default="", namespaces=ns)
+
+        # Clean up and parse
+        if coordinates:
+            lon, lat, alt = coordinates.split(",")
+        else:
+            lon = lat = alt = None
+
+        placemarks.append({
+            "name": name,
+            "address": address,
+            "description": description,
+            "timestamp": timestamp,
+            "latitude": float(lat) if lat else None,
+            "longitude": float(lon) if lon else None,
+            "altitude": float(alt) if alt else None,
+            "speed": int(speed) if speed else None,
+            "heading": int(heading) if heading else None
+        })
+
+    return placemarks

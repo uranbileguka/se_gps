@@ -9,22 +9,26 @@ from django.conf import settings
 from django.core.cache import cache
 from .models import GpsTracker
 from navixy.report_processors import (
-    process_json_trip,
-    process_json_stop,
-    process_json_fuel,
-    process_json_motohour,
-    process_json_zone,
+	process_json_trip,
+	process_json_stop,
+	process_json_fuel,
+	process_json_motohour,
+	process_json_zone,
 	)
 
-from navixy.models import GpsZone
+from navixy.models import GpsZone, TrackPoint
 import re
+import json
+import requests
+from xml.etree import ElementTree as ET
 
 logger = logging.getLogger(__name__)
 HEADERS = {"Accept": "application/json"}
 # NAVIXY_TZ = s.timezone("Asia/Ulaanbaatar")
 zone_ids = list(
-    GpsZone.objects.exclude(navixy_id=None).values_list("navixy_id", flat=True)
+	GpsZone.objects.exclude(navixy_id=None).values_list("navixy_id", flat=True)
 )
+from .magic import flatten_kml_placemarks
 
 REPORT_PLUGINS = {
 	"trip": {
@@ -44,53 +48,53 @@ REPORT_PLUGINS = {
 		"stop": {
 		"plugin": {
  				"hide_empty_tabs": True,
-                "plugin_id": 6,
-                "show_seconds": False,
-                "show_coordinates": False,
-                "filter": False,
+				"plugin_id": 6,
+				"show_seconds": False,
+				"show_coordinates": False,
+				"filter": False,
 		},
 		"processor": process_json_stop,  # ✅ direct function reference
 	},
 			"fuel": {
 		"plugin": {
  				 "show_seconds":False,
-            "plugin_id":10,
-            "graph_type":"mileage",
-            "detailed_by_dates":True,
-            "include_summary_sheet_only":False,
-            "use_ignition_data_for_consumption":False,
-            "include_mileage_plot":False,
-            "filter":True,
-            "include_speed_plot":False,
-            "smoothing":False,
-            "surge_filter":True,
-            "surge_filter_threshold":0.2,
-            "speed_filter":False,
-            "speed_filter_threshold":10
+			"plugin_id":10,
+			"graph_type":"mileage",
+			"detailed_by_dates":True,
+			"include_summary_sheet_only":False,
+			"use_ignition_data_for_consumption":False,
+			"include_mileage_plot":False,
+			"filter":True,
+			"include_speed_plot":False,
+			"smoothing":False,
+			"surge_filter":True,
+			"surge_filter_threshold":0.2,
+			"speed_filter":False,
+			"speed_filter_threshold":10
 		},
 		"processor": process_json_fuel,  # ✅ direct function reference
 	},
 			"motohour": {
 		"plugin": {
  				 "hide_empty_tabs":True,
-            "plugin_id":7,
-            "show_seconds":True,
-            "show_detailed":True,
-            "include_summary_sheet_only":False,
-            "filter":True
+			"plugin_id":7,
+			"show_seconds":True,
+			"show_detailed":True,
+			"include_summary_sheet_only":False,
+			"filter":True
 		},
 		"processor": process_json_motohour,  # ✅ direct function reference
 	},
 			"zone": {
 		"plugin": {
  				 "hide_empty_tabs":True,
-            "plugin_id":8,
-            "show_seconds":False,
-            "show_mileage":False,
-            "show_not_visited_zones":False,
-            "min_minutes_in_zone":2,
-            "hide_charts":True,
-            "zone_ids":zone_ids,
+			"plugin_id":8,
+			"show_seconds":False,
+			"show_mileage":False,
+			"show_not_visited_zones":False,
+			"min_minutes_in_zone":2,
+			"hide_charts":True,
+			"zone_ids":zone_ids,
 			},
 		"processor": process_json_zone,  # ✅ direct function reference
 		},
@@ -142,6 +146,62 @@ def pull_zone_data():
 			defaults={'name': zone['label']}
 	)
 
+# get trakc points
+# tracker_id = 45504
+def pull_track_points_data(tracker_id):
+	"""Fetch track points in KML format from Navixy and flatten them."""
+	url = get_config("NAVIXY_URL")
+	hash_value = get_navixy_hash()
+	
+	req = {
+		'hash': hash_value,
+		'tracker_id': tracker_id,
+		'from': "2025-05-01 00:00:00",
+		'to': "2025-05-01 23:59:59",		
+		'format': "kml",
+		'split': False,
+	}
+
+	try:
+		r = requests.post(f"{url}/track/download", headers=HEADERS, json=req)
+		r.raise_for_status()
+	except requests.RequestException as e:
+		raise Exception("Connection error while fetching track data") from e
+
+	content_type = r.headers.get('Content-Type', '')
+	if 'application/vnd.google-earth.kml+xml' in content_type or '<?xml' in r.text[:20]:
+		try:
+			placemarks = flatten_kml_placemarks(r.text)
+			technics = Fleet.objects.filter(gps_tracker_id=int(tracker_id))  # Returns a queryset
+			print("Selected technic:", technics)
+
+			if not technics.exists():
+				print("⚠️ No matching Fleet found for tracker_id", tracker_id)
+				return
+
+			technic = technics.first()  # Use the first match
+			print("Selected technic:", technic)
+
+			for entry in placemarks:
+				TrackPoint.objects.create(
+					name=entry['name'],
+					address=entry.get('address', ''),
+					description=entry['description'],
+					timestamp=entry['timestamp'],
+					latitude=entry['latitude'],
+					longitude=entry['longitude'],
+					altitude=entry['altitude'],
+					speed=entry['speed'],
+					heading=entry['heading'],
+					technic=technic,
+				)			
+		except ET.ParseError:
+			print("Failed to parse KML XML data")
+	else:
+		print("Unexpected content type or response:")
+		print("Status code:", r.status_code)
+		print("Content-Type:", content_type)
+		print("Response text:", r.text[:500])  # Preview first 500 chars
 
 
 

@@ -61,13 +61,13 @@ export const createBrand = async (brandName) => {
 	}
 };
 
-// Car model
-// / Fetch all car models
+// Fleet model
+// / Fetch all Fleet models
 export const getCarModelData = async () => {
   return axios.get(`${API_URL}/carmodels/`);
 };
 
-// Create a new car model
+// Create a new Fleet model
 export const createCarModel = async (name, brandId) => {
   return axios.post(`${API_URL}/carmodels/create/`, {
     name,
@@ -75,7 +75,7 @@ export const createCarModel = async (name, brandId) => {
   });
 };
 
-// Update a car model
+// Update a Fleet model
 export const updateCarModel = async (id, name, brandId) => {
   return axios.put(`${API_URL}/carmodels/${id}/`, {
     name,
@@ -83,7 +83,7 @@ export const updateCarModel = async (id, name, brandId) => {
   });
 };
 
-// Delete a car model
+// Delete a Fleet model
 export const deleteCarModel = async (id) => {
   return axios.delete(`${API_URL}/carmodels/${id}/`);
 };
@@ -185,3 +185,14 @@ export const fuelCountByDate = async (dateRange) => {
     throw error.response?.data || error.message;
   }
 };
+
+
+export const gettrackpoint = async (dateRange) => {
+  try {
+    const response = await axios.post(`${API_N_URL}/trackpoint/`, dateRange);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
+

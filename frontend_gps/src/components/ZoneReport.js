@@ -108,8 +108,8 @@ const ZoneReport = () => {
   }));
 
   const totalCount = barData.reduce((sum, item) => sum + item.count, 0);
-  const averageCountperCar = barData.length > 0 ? totalCount / barData.length : 0;
-  const averageCountperDay = lineData.length > 0 ? totalCount / lineData.length : 0;
+  const averageCountperCar = barData.length > 0 ? Math.round((totalCount / barData.length) * 10) / 10 : 0;
+  const averageCountperDay = lineData.length > 0 ? Math.round((totalCount / lineData.length) * 10) / 10 : 0;  
   const maxFleet = barData.reduce((max, item) => {
 	return item.count > max.count ? item : max;
   }, { count: -Infinity });
@@ -194,7 +194,7 @@ const ZoneReport = () => {
         <Grid item xs={12} md={8}>
           <Paper sx={{ p: 2 }}>
             <Typography variant="h6" gutterBottom>
-              Fleet Activity Over Months
+              Zone Entry by Date
             </Typography>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={lineData}>
@@ -210,7 +210,7 @@ const ZoneReport = () => {
         <Grid item xs={12} md={4}>
           <Paper sx={{ p: 2 }}>
             <Typography variant="h6" gutterBottom>
-              Fleet Distribution
+            Zone Entry by Technic
             </Typography>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
@@ -237,7 +237,7 @@ const ZoneReport = () => {
         <Grid item xs={12}>
           <Paper sx={{ p: 2 }}>
             <Typography variant="h6" gutterBottom>
-              Location Visits by Technic
+            Zone Entry by Technic
             </Typography>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={barData}>

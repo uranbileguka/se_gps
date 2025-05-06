@@ -13,10 +13,13 @@ import {
 	Box,
 	Snackbar,
 	Alert,
-	Button
+	Button,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FleetBrandForm from "./FleetBrandForm";
+import AddIcon from "@mui/icons-material/Add";
+import { useNavigate } from "react-router-dom"; 
+// ✅ Import React Router
 
 const Brand = () => {
 	const [brands, setBrands] = useState([]);
@@ -50,13 +53,24 @@ const Brand = () => {
 			}
 		}
 	};
-
+	const navigate = useNavigate(); 
 	const handleCloseSnackbar = () => {
 		setSnackbarOpen(false);
 	};
-
+	// ✅ React Router Navigation
 	return (
 		<Box>
+			<Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mt: 4, px: 3 }}>
+				<Button
+					variant="contained"
+					color="primary"
+					startIcon={<AddIcon />}
+					onClick={() => navigate("/fleet-brand-form")}
+					sx={{ fontWeight: 'bold' }}
+				>
+					Add Fleet
+				</Button>
+			</Box>
 			{/* Show the form only if editing a brand */}
 			{editBrand && (
 				<FleetBrandForm

@@ -8,7 +8,7 @@ from .models import Fleet, Brand, CarModel
 
 class FleetSerializer(serializers.ModelSerializer):
     brand_name = serializers.CharField(source="brand.name", read_only=True)  # ✅ Get brand name
-    car_model_name = serializers.CharField(source="car_model.name", read_only=True)  # ✅ Get car model name
+    car_model_name = serializers.CharField(source="car_model.name", read_only=True)  # ✅ Get Fleet model name
 
     class Meta:
         model = Fleet
@@ -22,7 +22,7 @@ class FleetSerializer(serializers.ModelSerializer):
             "brand",
             "brand_name",  # ✅ Include brand name
             "car_model",
-            "car_model_name",  # ✅ Include car model name
+            "car_model_name",  # ✅ Include Fleet model name
         ]
 
 
