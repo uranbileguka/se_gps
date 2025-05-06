@@ -148,7 +148,7 @@ def pull_zone_data():
 
 # get trakc points
 # tracker_id = 45504
-def pull_track_points_data(tracker_id):
+def pull_track_points_data(tracker_id, from_date, to_date):
 	"""Fetch track points in KML format from Navixy and flatten them."""
 	url = get_config("NAVIXY_URL")
 	hash_value = get_navixy_hash()
@@ -156,8 +156,8 @@ def pull_track_points_data(tracker_id):
 	req = {
 		'hash': hash_value,
 		'tracker_id': tracker_id,
-		'from': "2025-05-01 00:00:00",
-		'to': "2025-05-01 23:59:59",		
+		'from': from_date,
+		'to': to_date,		
 		'format': "kml",
 		'split': False,
 	}
@@ -173,15 +173,13 @@ def pull_track_points_data(tracker_id):
 		try:
 			placemarks = flatten_kml_placemarks(r.text)
 			technics = Fleet.objects.filter(gps_tracker_id=int(tracker_id))  # Returns a queryset
-			print("Selected technic:", technics)
 
 			if not technics.exists():
 				print("⚠️ No matching Fleet found for tracker_id", tracker_id)
 				return
 
 			technic = technics.first()  # Use the first match
-			print("Selected technic:", technic)
-
+		
 			for entry in placemarks:
 				TrackPoint.objects.create(
 					name=entry['name'],
@@ -203,6 +201,29 @@ def pull_track_points_data(tracker_id):
 		print("Content-Type:", content_type)
 		print("Response text:", r.text[:500])  # Preview first 500 chars
 
+
+# get trakc points
+# tracker_id = 45504
+def pull_track_points_datas(date):
+	"""Fetch track points in KML format from Navixy and flatten them."""
+
+	date_from = datetime.datetime.combine(date, datetime.time.min).strftime("%Y-%m-%d %H:%M:%S")
+	date_to = datetime.datetime.combine(date, datetime.time.max).strftime("%Y-%m-%d %H:%M:%S")
+
+	print("date_from:", date_from)
+	print("date_to:", date_to)
+	# get Fleet.gps_tracker_id
+	technics = Fleet.objects.filter(gps_tracker_id__isnull=False)
+	if not technics.exists():
+		print("⚠️ No matching Fleet found for tracker_id", tracker_id)
+		return
+
+	for technic in technics:
+		print("Selected technic:", technic)	
+		tracker_id = technic.gps_tracker_id
+		print("tracker_id:", tracker_id)
+		pull_track_points_data(tracker_id, date_from, date_to)
+		
 
 
 # used??

@@ -53,19 +53,13 @@ from navixy.services import get_tracker_ids
 tracker_ids = get_tracker_ids()
 print(tracker_ids)
 
-# %%
-# report tatah yesterday
-from navixy.services import generate_reports
-from datetime import datetime, time
-start_str = '2025-04-01'
-start_date = datetime.strptime(start_str, "%Y-%m-%d").date()
 
-generate_reports(start_date)
+
+
 
 # %%
 from navixy.services import pull_track_points_data
 pull_track_points_data(45504)
-
 
 # %%
 from navixy.services import check_report_status
@@ -98,3 +92,22 @@ data = (
 
 # See results
 list(data)
+
+
+# %% track poiunts  
+from navixy.services import pull_track_points_datas
+from datetime import datetime, time
+
+start_str = '2025-05-01'
+start_date = datetime.strptime(start_str, "%Y-%m-%d").date()
+
+pull_track_points_datas(start_date)
+
+# %%
+# report tatah yesterday
+from navixy.services import generate_reports
+from datetime import datetime, time
+start_str = '2025-04-01'
+start_date = datetime.strptime(start_str, "%Y-%m-%d").date()
+
+generate_reports(start_date)
