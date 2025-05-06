@@ -107,7 +107,7 @@ pull_track_points_datas(start_date)
 # report tatah yesterday
 from navixy.services import generate_reports
 from datetime import datetime, time
-start_str = '2025-04-01'
+start_str = '2025-04-02'
 start_date = datetime.strptime(start_str, "%Y-%m-%d").date()
 
 generate_reports(start_date)
