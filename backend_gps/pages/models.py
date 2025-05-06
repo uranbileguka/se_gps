@@ -46,7 +46,7 @@ class CarModel(models.Model):
 class Fleet(models.Model):
     fleet_id = models.CharField(max_length=10, unique=True)
     fleet_number = models.CharField(max_length=10)
-    gps_tracker_id = models.CharField(max_length=10)
+    gps_tracker_id = models.IntegerField()
     state_number = models.CharField(max_length=10)
     manufacture_date = models.DateField()
 

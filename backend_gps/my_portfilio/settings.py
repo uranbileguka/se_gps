@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,6 +41,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap4',
     'pages.apps.PagesConfig',
+    'navixy.apps.NavixyConfig',	
 	'rest_framework',
     'corsheaders', 
 	'rest_framework_simplejwt', # CORS for frontend
@@ -168,3 +170,36 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = 'home'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+
+# NAVIXY Configuration
+NAVIXY_URL = "https://api.gaikham.com"
+NAVIXY_LOGIN = "baterdene.kh@erchmining.mn"
+NAVIXY_PASS = "Erchuhaahudag2024"
+NAVIXY_HASH = "your_session_hash"
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'stream': sys.stdout,
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        '__main__': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+    },
+}

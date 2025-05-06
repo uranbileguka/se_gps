@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // ✅ Import React Router
 import { getFleetData, deleteFleet } from "../api";
 import {
   Table,
@@ -13,16 +14,14 @@ import {
   Box,
   Snackbar,
   Alert,
-  Button
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import FleetForm from "./FleetForm";
 
 const Fleet = () => {
   const [fleets, setFleets] = useState([]);
-  const [editFleet, setEditFleet] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const navigate = useNavigate(); // ✅ React Router Navigation
 
   const fetchData = async () => {
     try {
@@ -44,25 +43,20 @@ const Fleet = () => {
         setSnackbarMessage("Fleet deleted successfully!");
         setSnackbarOpen(true);
         fetchData();
-        setEditFleet(null);
       } catch (error) {
         console.error("Delete error:", error);
       }
     }
   };
 
+  const handleEdit = (fleet) => {
+    // console.log("editing fleet:", fleet.brand);
+    // console.log("editing fleet:", fleet.car_model);
+    navigate(`/edit-fleet/${fleet.id}`, { state: { fleet } }); // ✅ Navigate to Fleet Form
+  };
+
   return (
     <Box>
-      {editFleet && (
-        <FleetForm
-          editFleet={editFleet}
-          onSuccess={() => {
-            fetchData();
-            setEditFleet(null);
-          }}
-        />
-      )}
-
       <TableContainer component={Paper} sx={{ mt: 5, p: 3 }}>
         <Typography variant="h5" sx={{ mb: 2 }}>Fleet Information</Typography>
         <Table>
@@ -80,7 +74,7 @@ const Fleet = () => {
           </TableHead>
           <TableBody>
             {fleets.map((item) => (
-              <TableRow key={item.id} hover>
+              <TableRow key={item.id} hover sx={{ cursor: "pointer" }} onClick={() => handleEdit(item)}>
                 <TableCell>{item.fleet_id}</TableCell>
                 <TableCell>{item.fleet_number}</TableCell>
                 <TableCell>{item.brand_name}</TableCell>
@@ -89,7 +83,7 @@ const Fleet = () => {
                 <TableCell>{item.state_number}</TableCell>
                 <TableCell>{item.manufacture_date}</TableCell>
                 <TableCell>
-                  <IconButton onClick={() => handleDelete(item.id)} color="error">
+                  <IconButton onClick={(e) => { e.stopPropagation(); handleDelete(item.id); }} color="error">
                     <DeleteIcon />
                   </IconButton>
                 </TableCell>

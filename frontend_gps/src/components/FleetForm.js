@@ -1,42 +1,51 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate, useLocation } from "react-router-dom"; // ✅ Import Router Hooks
 import { 
   TextField, Button, MenuItem, Container, Typography, Paper, Snackbar, Alert 
 } from "@mui/material";
 import { getBrandData, getCarModelData, createFleet, updateFleet } from "../api";
+import { Controller } from "react-hook-form";
 
 
-const FleetForm = ({ editFleet, onSuccess }) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-    setValue,
-    watch,
-  } = useForm();
+const FleetForm = ({ onSuccess }) => {  // ✅ Removed duplicate editFleet
+  const navigate = useNavigate(); // ✅ Navigation Hook
+  const location = useLocation(); // ✅ Get Passed Fleet Data
+  const editFleet = location.state?.fleet || null; // ✅ Correctly Get Fleet Data
+
+  const { register, handleSubmit, formState: { errors }, reset, setValue, watch } = useForm();
 
   const [brands, setBrands] = useState([]);
   const [carModels, setCarModels] = useState([]);
   const [successOpen, setSuccessOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
 
-  const selectedBrand = watch("brand");
+  const selectedBrand = parseInt(watch("brand"), 10);
+
+  
+  useEffect(() => {
+    const loadData = async () => {
+      await fetchBrands(); // sets brands[]
+      await fetchCarModels(); // sets carModels[]
+    };
+    loadData();
+  }, []);
 
   useEffect(() => {
-    fetchBrands();
-    fetchCarModels();
-    
-    // If editing, populate form with existing data
-    if (editFleet) {
+    if (editFleet && brands.length > 0) {
+      console.log("Setting form values:", editFleet.brand);
+      console.log("selectedBrand", selectedBrand);
+
+      setValue("id", editFleet.id);
       setValue("fleetNumber", editFleet.fleet_number);
       setValue("gpsTrackerId", editFleet.gps_tracker_id);
       setValue("stateNumber", editFleet.state_number);
-      setValue("manufactureDate", editFleet.manufacture_date);
-      setValue("brand", editFleet.brand);
-      setValue("carModel", editFleet.car_model);
+      setValue("manufactureDate", editFleet.manufacture_date) ;
+      setValue("brand", parseInt(editFleet.brand, 10));
+      setValue("carModel", parseInt(editFleet.car_model, 10));
     }
-  }, [editFleet, setValue]);
+  }, [editFleet, brands, setValue]);
+
 
   const fetchBrands = async () => {
     try {
@@ -56,13 +65,15 @@ const FleetForm = ({ editFleet, onSuccess }) => {
     }
   };
 
-  const filteredCarModels = carModels.filter((model) => model.brand === selectedBrand);
-
+  // const filteredCarModels = carModels.filter((model) => model.brand === selectedBrand);
+  const filteredCarModels = carModels.filter(
+    (model) => model.brand === selectedBrand // selectedBrand is now an int
+  );
   const onSubmit = async (data) => {
     const formattedData = {
       fleet_id: data.fleetId?.trim() || Math.random().toString(36).substr(2, 10),  // ✅ Auto-generate if missing
       fleet_number: data.fleetNumber.trim(),  // ✅ Matches Django's field name
-      gps_tracker_id: data.gpsTrackerId.trim(),  // ✅ Correct field name
+      gps_tracker_id: data.gpsTrackerId,  // ✅ Correct field name
       state_number: data.stateNumber.trim(),  // ✅ Correct field name
       manufacture_date: data.manufactureDate,  // ✅ Correct field name
       brand: parseInt(data.brand, 10),  // ✅ Ensure it's an integer
@@ -70,19 +81,24 @@ const FleetForm = ({ editFleet, onSuccess }) => {
     };
   
     console.log("Formatted Data for API:", formattedData); // Debugging
-  
+
     try {
-      await createFleet(formattedData);
-      setSuccessMessage("Fleet added successfully!");
+      if (editFleet) {
+        await updateFleet(editFleet.id, formattedData);
+        setSuccessMessage("Fleet updated successfully!");
+      } else {
+        await createFleet(formattedData);
+        setSuccessMessage("Fleet added successfully!");
+      }
+
       setSuccessOpen(true);
       reset();
-      onSuccess();
+      setTimeout(() => navigate("/fleets"), 1500); // ✅ Redirect to Fleet List
     } catch (error) {
       console.error("Error submitting form:", error.response?.data || error.message);
     }
   };
-  
-  
+
   return (
     <Container maxWidth="sm" sx={{ mt: 5 }}>
       <Paper elevation={3} sx={{ p: 4, borderRadius: 3, bgcolor: "#ffffff", color: "#333", boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)" }}>

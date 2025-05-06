@@ -109,3 +109,79 @@ export const updateFleet = async (id, fleetData) => {
 export const deleteFleet = async (id) => {
   return axios.delete(`${API_URL}/fleets/${id}/`);
 };
+
+const API_N_URL = "http://127.0.0.1:8000/navixy/api";
+
+
+// login
+export const locationCountByTechnic = async (dateRange) => {
+  try {
+    const response = await axios.post(`${API_N_URL}/locationcountbytechnic/`, dateRange);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
+
+export const locationCountByDate = async (dateRange) => {
+  try {
+    const response = await axios.post(`${API_N_URL}/locationcountbydate/`, dateRange);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
+
+export const getAllLocations = async () => {
+  try {
+    const response = await axios.get(`${API_N_URL}/locations/`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
+
+export const getAlltechnics = async () => {
+  try {
+    const response = await axios.get(`${API_N_URL}/technics/`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
+
+export const motohourCountByTechnic = async (dateRange) => {
+  try {
+    const response = await axios.post(`${API_N_URL}/motohourCountByTechnic/`, dateRange);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
+
+export const motohourCountByDate = async (dateRange) => {
+  try {
+    const response = await axios.post(`${API_N_URL}/motohourCountByDate/`, dateRange);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
+
+export const fuelCountByTechnic = async (dateRange) => {
+  try {
+    const response = await axios.post(`${API_N_URL}/fuelCountByTechnic/`, dateRange);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
+
+export const fuelCountByDate = async (dateRange) => {
+  try {
+    const response = await axios.post(`${API_N_URL}/fuelCountByDate/`, dateRange);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};

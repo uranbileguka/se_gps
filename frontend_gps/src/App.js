@@ -10,6 +10,9 @@ import FleetBrandForm from "./components/FleetBrandForm";
 import FleetModelForm from "./components/FleetModelForm";
 import Brand from "./components/Brand";
 import CarModelManager from "./components/CarModelManager";
+import ZoneReport from "./components/ZoneReport";
+import FleetUtilizationReport from "./components/FleetUtilizationReport";
+import FuelReport from "./components/FuelReport";
 
 
 const App = () => {
@@ -19,6 +22,9 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Dashboard/>} /> 
         <Route path="/login" element={<Login />} />
+        <Route path="/zoneReport" element={<ZoneReport />} />
+        <Route path="/fuelReport" element={<FuelReport />} />
+        <Route path="/utilizationReport" element={<FleetUtilizationReport />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/fleet" element={<Fleet />} />
         <Route path="/brand" element={<Brand />} />
@@ -26,7 +32,7 @@ const App = () => {
         <Route path="/fleet-model-form" element={< FleetModelForm/>} />
         <Route path="/fleet-brand-form" element={<FleetBrandForm />} />
         <Route path="/CarModelManager" element={<CarModelManager />} />
-
+        <Route path="/edit-fleet/:id" element={<FleetForm />} /> {/* ✅ Route for editing */}
       </Routes>
     </Router>
   );

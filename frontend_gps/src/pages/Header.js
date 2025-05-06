@@ -50,7 +50,21 @@ const Header = () => {
             <ListItem button component={Link} to="/">
               <ListItemText primary="Home" />
             </ListItem>
-
+            {isLoggedIn() && (
+              <ListItem button component={Link} to="/zoneReport">
+                <ListItemText primary="Zone report" />
+              </ListItem>
+            )}
+            {isLoggedIn() && (
+              <ListItem button component={Link} to="/utilizationReport">
+                <ListItemText primary="Fleet utilization report" />
+              </ListItem>
+            )}
+            {isLoggedIn() && (
+              <ListItem button component={Link} to="/fuelReport">
+                <ListItemText primary="Fuel usage report" />
+              </ListItem>
+            )}                        
             {/* Fleet Option Only If Logged In */}
             {isLoggedIn() && (
               <ListItem button component={Link} to="/fleet">
