@@ -64,6 +64,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # React Frontend
 ]
 
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

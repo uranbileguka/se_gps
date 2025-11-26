@@ -36,11 +36,8 @@ const pieColors = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042"];
 
 const FleetUtilizationReport = () => {
   const today = new Date().toISOString().split("T")[0];
-  const firstOfMonth = new Date();
-  firstOfMonth.setDate(1);
-  const startOfMonth = firstOfMonth.toISOString().split("T")[0];
 
-  const [startDate, setStartDate] = useState(startOfMonth);
+  const [startDate, setStartDate] = useState("2025-05-01");
   const [endDate, setEndDate] = useState(today);
   const [barData, setBarData] = useState([]);
   const [lineData, setLineData] = useState([]);
