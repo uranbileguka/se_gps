@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-nyrm0n+-@yqah4jhe9vb$pe9yu-^=946wh&ypci@9gq@y0@4^$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["fleet.uranbileg.dev", "localhost", "127.0.0.1", "backend", "*"]
 
 
 # Application definition
@@ -61,7 +61,38 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'my_portfilio.urls'
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # React Frontend
+    "http://localhost:3000",  # React Frontend local
+    "http://fleet.uranbileg.dev",  # Production domain
+    "https://fleet.uranbileg.dev",  # Production domain with SSL
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+    "http://fleet.uranbileg.dev",
+    "https://fleet.uranbileg.dev",
 ]
 
 

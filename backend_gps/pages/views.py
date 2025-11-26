@@ -242,6 +242,9 @@ def get_tokens_for_user(user):
 
 # User Registration API
 class RegisterAPIView(APIView):
+    permission_classes = []  # Allow any user to register
+    authentication_classes = []  # No authentication required for registration
+    
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
@@ -252,6 +255,9 @@ class RegisterAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LoginAPIView(APIView):
+    permission_classes = []  # Allow any user to login
+    authentication_classes = []  # No authentication required for login
+    
     def post(self, request):
         email = request.data.get("email")
         password = request.data.get("password")

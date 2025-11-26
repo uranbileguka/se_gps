@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend_gps
+    container_name: gps_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend_gps:/app
+      - backend_static:/app/staticfiles
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DEBUG=False
+      - ALLOWED_HOSTS=fleet.uranbileg.dev,localhost,127.0.0.1,backend
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    networks:
+      - gps_network
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend_gps
+    container_name: gps_frontend
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - backend
+    networks:
+      - gps_network
+    restart: unless-stopped
+
+volumes:
+  backend_static:
+
+networks:
+  gps_network:
+    driver: bridge
