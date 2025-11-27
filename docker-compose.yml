@@ -13,6 +13,10 @@ services:
       - PYTHONUNBUFFERED=1
       - DEBUG=False
       - ALLOWED_HOSTS=fleet.uranbileg.dev,localhost,127.0.0.1,backend
+      - NAVIXY_URL=https://api.gaikham.com
+      - NAVIXY_LOGIN=${NAVIXY_LOGIN}
+      - NAVIXY_PASS=${NAVIXY_PASS}
+      - NAVIXY_HASH=${NAVIXY_HASH}
     command: >
       sh -c "python manage.py migrate &&
              python manage.py runserver 0.0.0.0:8000"

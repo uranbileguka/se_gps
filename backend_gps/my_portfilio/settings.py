@@ -208,10 +208,11 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
 # NAVIXY Configuration
-NAVIXY_URL = "https://api.gaikham.com"
-NAVIXY_LOGIN = "baterdene.kh@erchmining.mn"
-NAVIXY_PASS = "Erchuhaahudag2024"
-NAVIXY_HASH = "your_session_hash"
+import os
+NAVIXY_URL = os.getenv("NAVIXY_URL", "https://api.gaikham.com")
+NAVIXY_LOGIN = os.getenv("NAVIXY_LOGIN", "")
+NAVIXY_PASS = os.getenv("NAVIXY_PASS", "")
+NAVIXY_HASH = os.getenv("NAVIXY_HASH", "")
 
 LOGGING = {
     'version': 1,
