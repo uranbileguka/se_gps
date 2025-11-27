@@ -30,7 +30,7 @@ import {
 } from "recharts";
 
 
-const API_URL = "http://127.0.0.1:8000/navixy/api";
+const API_URL = "/navixy/api";
 
 const pieColors = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042"];
 

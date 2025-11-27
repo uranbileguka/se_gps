@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = "http://127.0.0.1:8000/pages/api";
+// Use relative URLs - nginx will proxy to backend
+const API_URL = "/pages/api";
 
 
 
@@ -111,7 +112,7 @@ export const deleteFleet = async (id) => {
   return axios.delete(`${API_URL}/fleets/${id}/`);
 };
 
-const API_N_URL = "http://127.0.0.1:8000/navixy/api";
+const API_N_URL = "/navixy/api";
 
 
 // login
