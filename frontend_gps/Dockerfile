@@ -6,15 +6,15 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies with cache mount for faster rebuilds
+# Install dependencies with memory limit and cache mount
 RUN --mount=type=cache,target=/root/.npm \
-    npm ci --prefer-offline --no-audit
+    NODE_OPTIONS="--max-old-space-size=2048" npm ci --prefer-offline --no-audit --omit=dev
 
 # Copy source code
 COPY . .
 
-# Build with Vite (outputs to 'dist' folder)
-RUN npm run build
+# Build with Vite (outputs to 'dist' folder) with memory limit
+RUN NODE_OPTIONS="--max-old-space-size=2048" npm run build
 
 # Production stage
 FROM nginx:alpine
