@@ -6,9 +6,8 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies with memory limit and cache mount
-RUN --mount=type=cache,target=/root/.npm \
-    NODE_OPTIONS="--max-old-space-size=2048" npm ci --prefer-offline --no-audit --omit=dev
+# Install dependencies with memory limit
+RUN NODE_OPTIONS="--max-old-space-size=2048" npm ci --prefer-offline --no-audit --omit=dev
 
 # Copy source code
 COPY . .
