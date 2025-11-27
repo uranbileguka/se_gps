@@ -6,8 +6,8 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies with memory limit
-RUN NODE_OPTIONS="--max-old-space-size=2048" npm ci --prefer-offline --no-audit --omit=dev
+# Install ALL dependencies (including devDependencies for build)
+RUN NODE_OPTIONS="--max-old-space-size=2048" npm ci --prefer-offline --no-audit
 
 # Copy source code
 COPY . .
