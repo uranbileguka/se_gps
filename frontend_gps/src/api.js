@@ -151,6 +151,24 @@ export const getAlltechnics = async () => {
   }
 };
 
+export const technicCountByTechnic = async (dateRange) => {
+  try {
+    const response = await axios.post(`${API_N_URL}/technicCountByTechnic/`, dateRange);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
+
+export const technicCountByDate = async (dateRange) => {
+  try {
+    const response = await axios.post(`${API_N_URL}/technicCountByDate/`, dateRange);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
+
 export const motohourCountByTechnic = async (dateRange) => {
   try {
     const response = await axios.post(`${API_N_URL}/motohourCountByTechnic/`, dateRange);

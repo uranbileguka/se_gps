@@ -62,6 +62,7 @@ ROOT_URLCONF = 'my_portfilio.urls'
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # React Frontend local
+    "http://localhost:3001",  # Vite dev server
     "http://fleet.uranbileg.dev",  # Production domain
     "https://fleet.uranbileg.dev",  # Production domain with SSL
 ]
@@ -91,6 +92,7 @@ CORS_ALLOW_HEADERS = [
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",
+    "http://localhost:3001",
     "http://fleet.uranbileg.dev",
     "https://fleet.uranbileg.dev",
 ]
