@@ -3,8 +3,8 @@ import { login } from "../api"; // Import login function from api.js
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("test@test.com");
+  const [password, setPassword] = useState("testpass123");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,6 +40,20 @@ const Login = () => {
         }}
       >
         <h3 className="text-center mb-3 text-primary">Fleet Management</h3>
+        
+        {/* Demo Login Info */}
+        <div className="alert alert-info py-2 mb-3" role="alert">
+          <div className="d-flex align-items-center">
+            <span className="me-2">🔐</span>
+            <div className="small">
+              <strong>Demo Login</strong>
+              <div className="text-muted" style={{ fontSize: "0.85rem" }}>
+                Credentials are pre-filled for you
+              </div>
+            </div>
+          </div>
+        </div>
+
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <input
